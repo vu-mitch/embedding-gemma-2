@@ -1,0 +1,9 @@
+streamlit>=1.38
+transformers>=4.56
+sentence-transformers>=5.1
+torch>=2.3
+llama-cpp-python>=0.3.16
+huggingface_hub>=0.24
+pypdf>=4.0
+numpy>=1.26
+pillow>=10.0
