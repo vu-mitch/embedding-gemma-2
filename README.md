@@ -1,0 +1,1 @@
+# embedding-gemma-2
