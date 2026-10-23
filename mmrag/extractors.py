@@ -85,8 +85,15 @@ class Transcriber:
             chunk_length_s=30,
         )
 
-    def __call__(self, audio_path: str | Path) -> list[dict]:
-        out = self.pipe(_to_wav16k(audio_path), return_timestamps=True, batch_size=4)
+    def __call__(self, audio_path: str | Path, language: str | None = None) -> list[dict]:
+        wav = _to_wav16k(audio_path)
+        try:
+            kwargs: dict = {"return_timestamps": True, "batch_size": 4}
+            if language and language != "auto":
+                kwargs["generate_kwargs"] = {"language": language, "task": "transcribe"}
+            out = self.pipe(wav, **kwargs)
+        finally:
+            Path(wav).unlink(missing_ok=True)
         segments = []
         for c in out.get("chunks", []):
             start, end = c.get("timestamp", (None, None))
@@ -110,10 +117,17 @@ def group_segments(segments: list[dict], window_s: float) -> list[dict]:
     return groups
 
 
-def extract_audio(path: str | Path, source: str, transcriber: Transcriber, window_s: float = 30.0, modality: str = "audio") -> list[Chunk]:
+def extract_audio(
+    path: str | Path,
+    source: str,
+    transcriber: Transcriber,
+    window_s: float = 30.0,
+    modality: str = "audio",
+    language: str | None = None,
+) -> list[Chunk]:
     return [
         Chunk(text=g["text"], source=source, modality=modality, kind="speech", start=g["start"], end=g["end"])
-        for g in group_segments(transcriber(path), window_s)
+        for g in group_segments(transcriber(path, language=language), window_s)
     ]
 
 
@@ -203,12 +217,13 @@ def extract_video(
     frame_every_s: float = 10.0,
     max_frames: int = 12,
     progress: ProgressFn | None = None,
+    language: str | None = None,
 ) -> list[Chunk]:
     chunks: list[Chunk] = []
     if transcriber is not None and has_audio_stream(path):
         if progress:
             progress(f"Transcribing audio track of {source}")
-        chunks += extract_audio(path, source, transcriber, window_s=window_s, modality="video")
+        chunks += extract_audio(path, source, transcriber, window_s=window_s, modality="video", language=language)
 
     if captioner is not None:
         if progress:
