@@ -56,6 +56,16 @@ python scripts/make_samples.py      # writes 3 PDFs, 3 WAVs, 3 MP4s into ./sampl
 Example prompts: *"how do plants make oxygen"*, *"what happens near an event
 horizon"*, *"how to fix a sour espresso shot"*, *"lava coming out of a mountain"*.
 
+## Gleisbau demo
+
+`demo/gleisbau/` is a fictional maintenance corpus for four cases (manual plus
+service video, spare-part drawing, archived report plus recorded conversation,
+training sheet plus training video). In the app, click **Load Gleisbau demo**,
+choose a case, then **Show the Evidence** to open the retrieved page or timestamp.
+Regenerate the files with `python scripts/make_gleisbau_demo.py` (`ffmpeg`,
+`fpdf2`, `edge-tts`). The papers are labelled as demo material and do not approve
+real repairs.
+
 ## Layout
 
 ```

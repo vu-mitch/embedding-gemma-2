@@ -1,0 +1,123 @@
+{
+  "disclaimer": "Demo-Unterlage. Sie gibt keinen Reparaturauftrag frei und ersetzt keine freigegebene Herstelleranweisung. Vor einer Arbeit Variante, Revision und Dokumentenstand prüfen.",
+  "cases": [
+    {
+      "id": "A",
+      "name": "The Machine Whisperer",
+      "blurb": "Prüfhinweise aus der Wartungsanleitung und das passende Servicevideo.",
+      "prompt": "Die Hydraulik an Maschine GB-204 verliert Druck. Welche relevanten Prüfhinweise stehen in der Wartungsanleitung, und gibt es dazu ein Servicevideo?",
+      "files": [
+        "WA-GB204-Hydraulik-RevC.pdf",
+        "servicevideo-gb204-hydraulikdruck.mp4"
+      ]
+    },
+    {
+      "id": "B",
+      "name": "Find That Part",
+      "blurb": "Ersatzteilzeichnung und Teilenummer, nur für Maschinenvariante B.",
+      "prompt": "Ich brauche die Dichtung für den Hydraulikzylinder der Stopfeinheit. Finde die passende Ersatzteilzeichnung und die Teilenummer für Maschinenvariante B.",
+      "files": [
+        "ET-Stopfeinheit-Variante-B.pdf"
+      ]
+    },
+    {
+      "id": "C",
+      "name": "Learn from the Last Repair",
+      "blurb": "Archivierter Servicebericht und das aufgezeichnete Gespräch dazu.",
+      "prompt": "Gab es bei unseren Gleisbaumaschinen schon einmal einen vergleichbaren Fehler? Was wurde damals festgestellt und welche Maßnahmen wurden dokumentiert?",
+      "files": [
+        "SB-2024-0842-Servicebericht.pdf",
+        "gespraech-kowalczyk-vogt-2024.wav"
+      ]
+    },
+    {
+      "id": "D",
+      "name": "Show Me How",
+      "blurb": "Schulungsvideo und die zugehörige Anleitung zum Filterwechsel.",
+      "prompt": "Wo wird in unseren Schulungsunterlagen der Wechsel des Filters an der Hydraulikeinheit gezeigt? Zeige mir das Video und die zugehörige Anleitung.",
+      "files": [
+        "SU-HYD-FLT-03-Schulung-Filterwechsel.pdf",
+        "schulung-filterwechsel-hydraulikeinheit.mp4"
+      ]
+    }
+  ],
+  "documents": [
+    {
+      "file": "WA-GB204-Hydraulik-RevC.pdf",
+      "modality": "pdf",
+      "case": "A",
+      "title": "Wartungsanleitung Hydraulik GB-204",
+      "doc_id": "WA-GB-204-HYD",
+      "revision": "C",
+      "status": "freigegeben",
+      "variant": "Maschine GB-204",
+      "issued": "15.01.2026"
+    },
+    {
+      "file": "servicevideo-gb204-hydraulikdruck.mp4",
+      "modality": "video",
+      "case": "A",
+      "title": "Servicevideo Hydraulikdruck GB-204",
+      "doc_id": "SV-GB204-HYD-01",
+      "revision": "C",
+      "status": "freigegeben",
+      "variant": "Maschine GB-204",
+      "issued": "15.01.2026"
+    },
+    {
+      "file": "ET-Stopfeinheit-Variante-B.pdf",
+      "modality": "pdf",
+      "case": "B",
+      "title": "Ersatzteilzeichnung Stopfeinheit Variante B",
+      "doc_id": "ET-STF-4418",
+      "revision": "B",
+      "status": "freigegeben",
+      "variant": "Maschinenvariante B",
+      "issued": "02.03.2026"
+    },
+    {
+      "file": "SB-2024-0842-Servicebericht.pdf",
+      "modality": "pdf",
+      "case": "C",
+      "title": "Servicebericht SB-2024-0842",
+      "doc_id": "SB-2024-0842",
+      "revision": "1",
+      "status": "freigegeben, archiviert",
+      "variant": "Maschine GB-187",
+      "issued": "14.03.2024"
+    },
+    {
+      "file": "gespraech-kowalczyk-vogt-2024.wav",
+      "modality": "audio",
+      "case": "C",
+      "title": "Gespräch Kowalczyk / Vogt, 18.03.2024",
+      "doc_id": "AUF-2024-0318",
+      "revision": "Originalaufnahme",
+      "status": "archiviert",
+      "variant": "bezieht sich auf GB-187",
+      "issued": "18.03.2024"
+    },
+    {
+      "file": "SU-HYD-FLT-03-Schulung-Filterwechsel.pdf",
+      "modality": "pdf",
+      "case": "D",
+      "title": "Schulungsunterlage Filterwechsel",
+      "doc_id": "SU-HYD-FLT-03",
+      "revision": "3",
+      "status": "freigegeben",
+      "variant": "Hydraulikeinheit der GB-Maschinen",
+      "issued": "20.09.2026"
+    },
+    {
+      "file": "schulung-filterwechsel-hydraulikeinheit.mp4",
+      "modality": "video",
+      "case": "D",
+      "title": "Schulungsvideo Filterwechsel",
+      "doc_id": "SV-FLT-03",
+      "revision": "3",
+      "status": "freigegeben",
+      "variant": "Hydraulikeinheit der GB-Maschinen",
+      "issued": "20.09.2026"
+    }
+  ]
+}
