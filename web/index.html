@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Multimodale Suche</title>
+  <link rel="stylesheet" href="/styles.css?v=3" />
+</head>
+<body>
+  <button id="open-sources" class="topbtn" type="button">Quellen</button>
+  <main>
+    <div class="column">
+      <div class="question">
+        <span class="goldbar" aria-hidden="true"></span>
+        <label class="question-body">
+          <span class="visually-hidden">Frage</span>
+          <textarea id="query" rows="1" placeholder="Frage an die Unterlagen stellen" spellcheck="true"></textarea>
+        </label>
+      </div>
+      <p id="hint" class="hint">Quellen öffnen, Dateien ablegen und den Index bauen.</p>
+      <article id="answer" class="answer" hidden>
+        <p id="answer-text"></p>
+        <div id="chips" class="chips"></div>
+      </article>
+      <div id="evidence" class="evidence"></div>
+      <section id="detail" class="detail" hidden></section>
+    </div>
+    <section id="files-wrap" class="files-wrap" hidden>
+      <h2>Top Files</h2>
+      <div id="files" class="file-rail"></div>
+    </section>
+  </main>
+
+  <div id="scrim" class="scrim" hidden></div>
+  <aside id="drawer" class="drawer" hidden aria-labelledby="drawer-title">
+    <div class="drawer-head">
+      <h2 id="drawer-title">Quellen</h2>
+      <button id="close-sources" class="topbtn" type="button">Schließen</button>
+    </div>
+    <p class="drawer-lead">Bis zu drei PDFs, drei Audiodateien und drei Videos. Alles wird in Text überführt und in einem gemeinsamen Vektorraum gesucht.</p>
+
+    <div id="drop" class="drop" tabindex="0">
+      <p>Dateien hierher ziehen oder auswählen</p>
+      <span>PDF, Audio, Video</span>
+      <input id="file-input" type="file" multiple accept=".pdf,.mp3,.wav,.m4a,.ogg,.flac,.webm,.mp4,.mov,.mkv,.avi,application/pdf,audio/*,video/*" />
+    </div>
+    <ul id="library" class="library"></ul>
+    <p id="library-empty" class="drawer-note">Noch keine Dateien.</p>
+
+    <form id="index-form">
+      <fieldset>
+        <legend>Modelle</legend>
+        <label>Backend
+          <select id="backend" name="backend">
+            <option>GGUF (llama.cpp)</option>
+            <option>Transformers (HF)</option>
+          </select>
+        </label>
+        <p id="hf-warn" class="warn" hidden>Kein HF_TOKEN gesetzt. Das Modell google/embeddinggemma-300m ist zugangsbeschränkt.</p>
+        <label>GGUF-Variante
+          <select id="variant" name="variant">
+            <option>Q8_0 (ggml-org, 330 MB)</option>
+            <option>Q4_0 (unsloth, 280 MB)</option>
+            <option>BF16 (unsloth, 620 MB)</option>
+            <option>F32 (unsloth, 1.2 GB)</option>
+          </select>
+        </label>
+        <label>Dimension
+          <select id="dim" name="dim">
+            <option value="768" selected>768</option>
+            <option value="512">512</option>
+            <option value="256">256</option>
+            <option value="128">128</option>
+          </select>
+        </label>
+        <label>Sprache zu Text
+          <select id="whisper" name="whisper_id">
+            <option>openai/whisper-tiny</option>
+            <option selected>openai/whisper-base</option>
+            <option>openai/whisper-small</option>
+          </select>
+        </label>
+        <label class="check"><input id="captions" type="checkbox" checked /> Video-Keyframes beschreiben</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Zuschnitt</legend>
+        <label>PDF-Abschnitt <output id="chunk-out">180</output> Wörter
+          <input id="chunk" type="range" min="60" max="400" step="20" value="180" />
+        </label>
+        <label>Transkriptfenster <output id="window-out">30</output> s
+          <input id="window" type="range" min="10" max="120" step="5" value="30" />
+        </label>
+        <label>Keyframe alle <output id="frame-out">10</output> s
+          <input id="frame" type="range" min="2" max="60" step="1" value="10" />
+        </label>
+        <label>Max. Keyframes <output id="maxframes-out">12</output>
+          <input id="maxframes" type="range" min="2" max="30" step="1" value="12" />
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Suche</legend>
+        <div class="checks">
+          <label class="check"><input class="mod" type="checkbox" value="pdf" checked /> PDF</label>
+          <label class="check"><input class="mod" type="checkbox" value="audio" checked /> Audio</label>
+          <label class="check"><input class="mod" type="checkbox" value="video" checked /> Video</label>
+        </div>
+      </fieldset>
+
+      <div class="drawer-actions">
+        <button id="build" class="primary" type="submit">Index bauen</button>
+        <button id="clear" class="quiet" type="button">Index leeren</button>
+      </div>
+    </form>
+
+    <div id="build-box" class="build" hidden>
+      <div class="build-track"><div id="build-fill"></div></div>
+      <p id="build-msg"></p>
+      <pre id="build-log"></pre>
+    </div>
+
+    <button id="beispiel" class="quiet beispiel" type="button">Beispielansicht</button>
+  </aside>
+  <script src="/app.js?v=3"></script>
+</body>
+</html>
