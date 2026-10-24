@@ -1,9 +1,14 @@
 # embedding-gemma-2
 
-A Streamlit demo of a **multimodal retrieval pipeline** built on
+A demo of a **multimodal retrieval pipeline** built on
 [EmbeddingGemma](https://huggingface.co/google/embeddinggemma-300m). Upload up to
 3 PDFs, 3 audio files and 3 videos, then retrieve the most relevant passages,
 audio segments and video moments for a prompt.
+
+The result view is a small web UI: the question, a short answer drawn from the
+best passage, the strongest evidence (manual page or service video) and a
+**Top Files** row with match scores. Streamlit cannot lay that out, so the demo
+serves the page itself.
 
 ## How it works
 
@@ -41,8 +46,12 @@ Requires Python 3.10+ and `ffmpeg` on `PATH`.
 python -m venv .venv && source .venv/bin/activate
 pip install torch --index-url https://download.pytorch.org/whl/cpu   # or your CUDA build
 pip install -r requirements.txt
-streamlit run app.py
+python app.py
 ```
+
+Open http://127.0.0.1:8000. For a layout preview without downloading models, use
+**Beispielansicht** in the Quellen panel, or set `MMRAG_EMBEDDER=hash` to index
+with a lexical stand-in instead of EmbeddingGemma.
 
 Models download from the Hugging Face Hub the first time you use them.
 
@@ -59,9 +68,12 @@ horizon"*, *"how to fix a sour espresso shot"*, *"lava coming out of a mountain"
 ## Layout
 
 ```
-app.py               Streamlit UI
+app.py               launches the web UI
+server.py            upload, index and search API
+web/                 result layout (question, answer, evidence, top files)
 mmrag/embedder.py    EmbeddingGemma backends (GGUF via llama.cpp, HF via transformers)
 mmrag/extractors.py  PDF / audio / video -> text chunks
+mmrag/present.py     turns hits into the result view
 mmrag/index.py       in-memory cosine-similarity index
 scripts/make_samples.py  demo data generator
 ```
