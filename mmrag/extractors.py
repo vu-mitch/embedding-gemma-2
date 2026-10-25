@@ -110,10 +110,20 @@ def group_segments(segments: list[dict], window_s: float) -> list[dict]:
     return groups
 
 
-def extract_audio(path: str | Path, source: str, transcriber: Transcriber, window_s: float = 30.0, modality: str = "audio") -> list[Chunk]:
+def extract_audio(
+    path: str | Path,
+    source: str,
+    transcriber: Transcriber,
+    window_s: float = 30.0,
+    modality: str = "audio",
+    speech_segments: list | None = None,
+) -> list[Chunk]:
+    segments = transcriber(path)
+    if speech_segments is not None:
+        speech_segments.extend(segments)
     return [
         Chunk(text=g["text"], source=source, modality=modality, kind="speech", start=g["start"], end=g["end"])
-        for g in group_segments(transcriber(path), window_s)
+        for g in group_segments(segments, window_s)
     ]
 
 
@@ -203,12 +213,15 @@ def extract_video(
     frame_every_s: float = 10.0,
     max_frames: int = 12,
     progress: ProgressFn | None = None,
+    speech_segments: list | None = None,
 ) -> list[Chunk]:
     chunks: list[Chunk] = []
     if transcriber is not None and has_audio_stream(path):
         if progress:
             progress(f"Transcribing audio track of {source}")
-        chunks += extract_audio(path, source, transcriber, window_s=window_s, modality="video")
+        chunks += extract_audio(
+            path, source, transcriber, window_s=window_s, modality="video", speech_segments=speech_segments,
+        )
 
     if captioner is not None:
         if progress:

@@ -14,10 +14,14 @@ prefixed differently (see the model card).
 
 from __future__ import annotations
 
+import hashlib
+import re
 from dataclasses import dataclass
 from typing import Sequence
 
 import numpy as np
+
+_TOKEN = re.compile(r"[a-z0-9]+")
 
 QUERY_PROMPT = "task: search result | query: "
 DOC_PROMPT = "title: {title} | text: "
@@ -84,6 +88,26 @@ class GGUFEmbedder(BaseEmbedder):
         # One call per text keeps llama.cpp's sequence handling simple and
         # avoids exceeding n_ctx when batching long chunks.
         return np.array([self.llm.embed(t, truncate=True) for t in texts], dtype=np.float32)
+
+
+class LexicalEmbedder(BaseEmbedder):
+    """Hashed bag-of-words vectors for the offline demo and tests.
+
+    Same prompt prefixes and L2 normalisation as EmbeddingGemma, without a
+    download. Not a substitute for the model when you have one.
+    """
+
+    def __init__(self, dim: int = 256):
+        super().__init__(dim=dim)
+        self.name = f"lexical-hash-{dim}"
+
+    def _encode(self, texts: Sequence[str]) -> np.ndarray:
+        out = np.zeros((len(texts), self.dim), dtype=np.float32)
+        for row, text in enumerate(texts):
+            for token in _TOKEN.findall(text.lower()):
+                digest = hashlib.md5(token.encode("utf-8")).digest()
+                out[row, int.from_bytes(digest[:4], "little") % self.dim] += 1.0
+        return out
 
 
 class HFEmbedder(BaseEmbedder):
